@@ -1,5 +1,6 @@
 add_subdirectory(print_stats)
 add_subdirectory(read_data)
+add_subdirectory(read_data_bin)
 add_subdirectory(sample_data)
 add_subdirectory(simple_grabber)
 add_subdirectory(ultra_simple)

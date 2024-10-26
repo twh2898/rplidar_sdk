@@ -5,6 +5,7 @@
 #include <csignal>
 #include <cstdlib>
 #include <cstring>
+#include <fstream>
 #include <memory>
 #include <vector>
 
@@ -143,13 +144,12 @@ int main(int argc, const char * argv[]) {
 
     drv->setMotorSpeed();
 
-    auto of = fmt::output_file("data.csv");
-    of.print("theta,dist,q,flag\n");
+    std::ofstream of("data.bin", std::ios::out | std::ios::binary);
 
     println("Reading from lidar...");
     drv->startScan(false, true);
 
-    for (size_t i = 0;; i++) {
+    for (;;) {
         std::array<sl_lidar_response_measurement_node_hq_t, 8192> nodes;
         size_t count = nodes.size();
 
@@ -157,18 +157,13 @@ int main(int argc, const char * argv[]) {
 
         if (SL_IS_FAIL(op_result)) {
             println(stderr, "Failed to read from lidar");
+            drv->stop();
             return -1;
         }
 
         drv->ascendScanData(nodes.data(), count);
-        for (int pos = 0; pos < (int)count; ++pos) {
-            of.print("{},{},{},{},{}\n",
-                     i,
-                     (nodes[pos].angle_z_q14 * 90.f) / 16384.f,
-                     nodes[pos].dist_mm_q2 / 4.0f,
-                     nodes[pos].quality >> SL_LIDAR_RESP_MEASUREMENT_QUALITY_SHIFT,
-                     (nodes[pos].flag & SL_LIDAR_RESP_HQ_FLAG_SYNCBIT ? "S" : ""));
-        }
+        of.write(reinterpret_cast<char *>(&count), sizeof(size_t));
+        of.write(reinterpret_cast<char *>(nodes.data()), count * sizeof(sl_lidar_response_measurement_node_hq_t));
     }
 
     drv->stop();
