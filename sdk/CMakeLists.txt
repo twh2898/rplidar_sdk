@@ -24,16 +24,30 @@ target_include_directories(${TARGET}
 
 target_link_libraries(${TARGET} PUBLIC Threads::Threads)
 
+set_property(TARGET ${TARGET} PROPERTY POSITION_INDEPENDENT_CODE ON)
+
+# Check for Inter Procedural Optimization (IPO)
+include(CheckIPOSupported)
+check_ipo_supported(RESULT result)
+if(result)
+    set_target_properties(${TARGET} PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
+endif()
+
 # Add ALIAS target for use in add_subdirectory or build directory
 add_library(${PROJECT_NAME}::${TARGET} ALIAS ${TARGET})
+
+# IDE support, show headers in a folder
+source_group(TREE "${PROJECT_SOURCE_DIR}/include"
+    PREFIX "Header Files"
+    FILES ${HEADER_LIST})
 
 # Add target to Project Targets for install
 install(TARGETS ${TARGET}
     EXPORT ${PROJECT_NAME}Targets
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}) # This is for Windows?
 
 # Include the headers in install
-install(DIRECTORY "${${PROJECT_NAME}_SOURCE_DIR}/sdk/include/"
+install(DIRECTORY "${${PROJECT_NAME}_SOURCE_DIR}/include/"
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
