@@ -156,7 +156,7 @@ int main(int argc, const char * argv[]) {
         auto op_result = drv->grabScanDataHq(nodes.data(), count);
 
         if (SL_IS_FAIL(op_result)) {
-            println(stderr, "Failed to read from lidar");
+            println(stderr, "Failed to read from lidar: {}", resultErrorString(op_result));
             drv->stop();
             return -1;
         }
