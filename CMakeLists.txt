@@ -14,12 +14,13 @@ include(GNUInstallDirs)
 
 set(CMAKE_CXX_STANDARD 17)
 
-find_package(fmt 11.0 REQUIRED)
 find_package(Threads REQUIRED)
 
 add_subdirectory(sdk)
 
 if(RPLIDAR_BUILD_EXAMPLES)
+    find_package(fmt 11.0 REQUIRED)
+
     add_subdirectory(app)
 endif()
 
@@ -32,9 +33,9 @@ install(EXPORT ${PROJECT_NAME}Targets
 # Generate ConfigVersion file
 include(CMakePackageConfigHelpers)
 configure_package_config_file(cmake/ProjectConfig.cmake
-  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
-  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/rplidar
-  PATH_VARS)
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/rplidar
+    PATH_VARS)
 
 write_basic_package_version_file(
     ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
