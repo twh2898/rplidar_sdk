@@ -36,11 +36,6 @@ endif()
 # Add ALIAS target for use in add_subdirectory or build directory
 add_library(${PROJECT_NAME}::${TARGET} ALIAS ${TARGET})
 
-# IDE support, show headers in a folder
-source_group(TREE "${PROJECT_SOURCE_DIR}/include"
-    PREFIX "Header Files"
-    FILES ${HEADER_LIST})
-
 # Add target to Project Targets for install
 install(TARGETS ${TARGET}
     EXPORT ${PROJECT_NAME}Targets

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.0)
+cmake_minimum_required(VERSION 3.15..3.20)
 project(rplidar VERSION 2.1.0 LANGUAGES C CXX)
 
 set(RPLIDAR_IS_MASTER_PROJECT OFF)
@@ -11,6 +11,10 @@ option(RPLIDAR_BUILD_EXAMPLES "Builds the rplidar examples" ${RPLIDAR_IS_MASTER_
 
 # Use for platform independent install dirs, despite being called GNU
 include(GNUInstallDirs)
+
+# Create config.h with project version numbers
+configure_File(cmake/config.h.in include/config.h)
+include_directories(PRIVATE ${CMAKE_BINARY_DIR}/include)
 
 set(CMAKE_CXX_STANDARD 17)
 
