@@ -1,2 +1,4 @@
-add_subdirectory(ultra_simple)
+add_subdirectory(print_stats)
+add_subdirectory(sample_data)
 add_subdirectory(simple_grabber)
+add_subdirectory(ultra_simple)
