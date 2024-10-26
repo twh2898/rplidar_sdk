@@ -27,3 +27,4 @@ sdk/obj
 *.obj
 *.o
 build/
+install/
