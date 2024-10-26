@@ -44,5 +44,5 @@ install(TARGETS ${TARGET}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}) # This is for Windows?
 
 # Include the headers in install
-install(DIRECTORY "${${PROJECT_NAME}_SOURCE_DIR}/include/"
+install(DIRECTORY "${${PROJECT_NAME}_SOURCE_DIR}/sdk/include/"
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

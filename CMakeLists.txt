@@ -30,17 +30,19 @@ install(EXPORT ${PROJECT_NAME}Targets
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
 # Generate ConfigVersion file
-# include(CMakePackageConfigHelpers)
-# write_basic_package_version_file(
-#     ${PROJECT_NAME}ConfigVersion.cmake
-#     VERSION ${PROJECT_VERSION}
-#     COMPATIBILITY AnyNewerVersion)
+include(CMakePackageConfigHelpers)
+configure_package_config_file(cmake/ProjectConfig.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/rplidar
+  PATH_VARS)
 
-# # Copy the Config file to the build dir
-# configure_file(cmake/ProjectConfig.cmake ${PROJECT_NAME}Config.cmake @ONLY)
+write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion)
 
-# # Add Config and ConfigVersion files to install
-# install(FILES
-#     "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-#     "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
-#     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+# Add Config and ConfigVersion files to install
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})

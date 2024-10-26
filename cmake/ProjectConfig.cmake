@@ -1,3 +1,5 @@
-include(CMakeFindDependencyMacro)
+set(RPLIDAR_VERSION @PROJECT_VERSION@)
 
-include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
+@PACKAGE_INIT@
+
+check_required_components(@PROJECT_NAME@)
