@@ -1,6 +1,6 @@
 set(TARGET rplidar)
 
-file(GLOB SOURCE_LIST 
+file(GLOB SOURCE_LIST
     ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/dataunpacker/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/dataunpacker/unpacker/*.cpp
@@ -16,14 +16,24 @@ file(GLOB HEADER_LIST
 
 add_library(${TARGET} ${SOURCE_LIST} ${HEADER_LIST})
 target_include_directories(${TARGET}
+    PRIVATE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
     PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/src)
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>)
 
 target_link_libraries(${TARGET} PUBLIC Threads::Threads)
 
+# Add ALIAS target for use in add_subdirectory or build directory
+add_library(${PROJECT_NAME}::${TARGET} ALIAS ${TARGET})
+
+# Add target to Project Targets for install
 install(TARGETS ${TARGET}
-    EXPORT ${TARGET}Targets
-    DESTINATION lib
-    LIBRARY DESTINATION lib
-    PUBLIC_HEADER DESTINATION include)
+    EXPORT ${PROJECT_NAME}Targets
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+# Include the headers in install
+install(DIRECTORY "${${PROJECT_NAME}_SOURCE_DIR}/sdk/include/"
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
